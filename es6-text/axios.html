@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>axios</title>
+	<script src="https://cdn.bootcss.com/axios/0.19.0-beta.1/axios.js"></script>
+	<script>
+	// 1.axios默认配置
+	axios.defaults.baseURL = "http://134.175.100.63:6677"
+	// 下面的axios.defaults.transformResponse只能用于改变函数返回的值或结果的类型
+	// axios.defaults.transformResponse = [(data)=>{
+	// 	console.log("默认配置打印",data)
+	// }]
+	// 响应拦截器，所有的响应都将通过这个所过滤，作用是捕获所有的响应异常，免得每次请求都要写一次捕获异常的处理；
+	axios.interceptors.response.use(function(response){
+		// 将封装后的对象data，status，statusText替换成response.data中的data,status,message.
+		response.data = response.data.data;
+		response.status = response.data.status;
+		response.statusText = response.data.message;
+		return response;
+	},function(error){
+		return Promise.reject(error); 
+	})
+	// 2.封装axios函数
+	// 异步处理，一旦哪个环节出错，将会停止执行后面的代码；
+	async function loaddata(){
+		let c_response = await axios.get("/customer/findAll");
+		console.log("封装函数axios内部打印",c_response.data)
+		let o_response = await axios.get("/order/findAll");
+		console.log("封装函数axios内部打印订单信息",o_response.data)
+		let customerID = c_response.data[0].id;
+		let c_address = await axios.get("/address/findByCustomerId",{
+			params:{
+				id:customerID
+			}
+		});
+		console.log("顾客地址信息",c_address.data)
+	}
+	// 3.调用函数
+	loaddata();
+	</script>
+</head>
+<body>
+	
+</body>

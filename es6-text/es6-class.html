@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>class</title>
+	<script>
+		class Animal{
+			// 构造方法
+			constructor(name,age){
+				this.name = name;
+				this.age = age;
+			}
+			// 普通方法
+			sayname(){
+				console.log("my name is",this.name)
+			}
+			sayage(){
+				console.log("my age is",this.age)
+			}
+		}
+		// let a = new Animal("wan",12)
+		// console.log(a);
+		// a.sayname();
+		// a.sayage();
+		// 原型链继承
+		class Dog extends Animal {
+			constructor(name,age,gender){
+				// 继承,借用构造函数。类似于
+				// function Dog (name,age,gender){
+				// Animal call (this,name,age)
+				// this.gender = gender;}
+				super(name,age)
+				this.gender=gender;
+			}
+			saygender(){
+				console.log("my gender is",this.gender)
+			}
+		}
+		let d = new Dog("小黄毛",10,"male") 
+		console.log(d)
+		d.sayname();
+		d.saygender();
+	</script>
+</head>
+<body>
+	
+</body>
+</html>
