@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>element组件使用</title>
+  <script src="https://cdn.bootcss.com/axios/0.19.0-beta.1/axios.js"></script>
+  <script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <!-- 引入组件库 -->
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+<body>
+  <div id="wapper">
+    <h5>{{title}}</h5>
+    <!-- {{product}} -->
+    {{productsIds}}
+    <div style="margin-bottom: 10px;margin-top:10px">
+      <el-button @click="add">添加</el-button>
+      <el-button @click="deletemoer">批量删除</el-button>
+    </div>
+    <el-table :data="products" style="width: 100%" @selection-change="handleSelectionChange">
+    <!-- 这里的多选框已经被上面的代码给绑定过事件，所以不用:value="products.id"的传递参数，但他获得的是整个所选中的全部属性和值，而我们要的是id所组成的数组，就要在多一步将传递的数据改变；*将数组对象转化为数组操作*-->
+    <el-table-column type="selection" width="55">
+    </el-table-column>
+    <el-table-column prop="name" label="name" width="120">
+    </el-table-column>
+    <el-table-column prop="description" label="description" width="120">
+    </el-table-column>
+    <el-table-column prop="price" label="price" width="120">
+    </el-table-column>
+    <el-table-column prop="status" label="status" width="120">
+    </el-table-column>
+    <el-table-column prop="photo" label="photo" width="120">
+    </el-table-column>
+    <el-table-column prop="categoryId" label="categoryId" width="120">
+    </el-table-column>
+    <el-table-column prop="" label="操作" width="120">
+  <!--  <el-button @click="delete()">删除</el-button>
+    <el-button @click="updata()">修改</el-button> -->
+    </el-table-column>
+    </el-table>
+  </div>
+
+  <script>
+    axios.defaults.baseURL="http://134.175.100.63:6677";
+    let vm = new Vue({
+      el:"#wapper",
+      data:{
+        title:"产品管理界面",
+        products:[{}],
+        productsIds:[],
+      },
+      created(){
+        this.reloadDate();
+      },
+      methods:{
+        reloadDate(){
+          axios.get('/product/findAll').then((result)=>{
+            this.products=result.data.data;
+          })
+        },
+        add() {
+
+        },
+        deletemoer(){
+
+        },
+        delete(){
+
+        },
+        updata(){
+
+        },
+        async handleSelectionChange(val) {
+            // 先获取数组对象中的id个数，在push进所创建的新数组中；
+            let arr = val;
+            var types = [];
+            for(var i in arr){
+                if(types.indexOf(arr[i].id) === -1){
+                    types.push(arr[i].id)
+                }
+                this.productsIds = types;
+            }
+          },
+      }
+    })
+  </script>
+</body>
+</html>
